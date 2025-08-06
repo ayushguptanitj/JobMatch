@@ -1,0 +1,470 @@
+{
+  "name": "Linkedin Job automation agent",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "a71682d5-b433-41b2-afc5-a7ae39111123",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://rss.app/feeds/lfNW2Tj4QZRQCw5X.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "044f7c08-94d4-4010-8033-1b5a739b5c23",
+      "name": "RSS Read"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "12hjK4WBa5-tkAjIh7HkaPpwLdoX3OgxB7gRcw9HHztM",
+          "mode": "list",
+          "cachedResultName": "Linkedin Job Listings",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12hjK4WBa5-tkAjIh7HkaPpwLdoX3OgxB7gRcw9HHztM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12hjK4WBa5-tkAjIh7HkaPpwLdoX3OgxB7gRcw9HHztM/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Title": "={{ $('RSS Read').item.json.title }}",
+            "Link": "={{ $('RSS Read').item.json.link }}",
+            "Date": "={{ $('RSS Read').item.json.pubDate }}",
+            "Job Description ": "={{ $('Edit Fields').item.json.job_desciption }}",
+            "Company Name": "={{ $('Edit Fields').item.json[\"company_name \"] }}",
+            "Benefits": "={{ $('Edit Fields').item.json.benefits }}",
+            "Rating": "={{ $('Edit Fields1').item.json.score }}"
+          },
+          "matchingColumns": [
+            "Title"
+          ],
+          "schema": [
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Job Description ",
+              "displayName": "Job Description ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Link",
+              "displayName": "Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Rating",
+              "displayName": "Rating",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Benefits",
+              "displayName": "Benefits",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Job Description",
+              "displayName": "Job Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Cover Letter",
+              "displayName": "Cover Letter",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        2464,
+        0
+      ],
+      "id": "c1716c96-b427-4d1e-9556-588ad1a65695",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "I7DGKGtojFKd6kRO",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "a318dab3-319f-4881-a3a1-4e0bb17f8546",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.link }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        624,
+        0
+      ],
+      "id": "a2674bb6-6ac1-4305-bac6-7b01c06574cb",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash-lite",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash-lite"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are an expert AI assistant designed to extract key information from the HTML of a job listing page and return it as a clean, valid JSON object.\n\nRespond ONLY with raw valid JSON (no markdown, no code blocks, no explanation, no text before or after the JSON).\n\nUse this structure:\n{\n  \"company_name\": \"\",\n  \"location\": \"\",\n  \"description\": \"\",\n  \"benefits\": \"\"\n}\n\nHere is the HTML content:\n{{ $json.data }}\n"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        832,
+        0
+      ],
+      "id": "933f4ec7-2565-4b88-b19e-6de6b93f433f",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "WqtPWAjnu8quyiBH",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash-lite",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash-lite"
+        },
+        "messages": {
+          "values": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        2032,
+        0
+      ],
+      "id": "301f9596-e924-4ef6-a56b-31abe00a34ee",
+      "name": "Message a model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "WqtPWAjnu8quyiBH",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash-lite",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash-lite"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You're an intelligent bot rating how closely a job listing is to a candidates skill set, on a 5 score.\nGive the following points:\na) 3 points for skills matching, 1 point for mostly matching\nb) 1 point for it being the right experience level\nc) 1 point for it being a remote position\nd) 1 point if past job experience matches the job role\ne) 1 point if the skills on the resume align with the job\nf) 3 points if I meet the job qualifications posted based on my resume\n\nRespond ONLY with this raw JSON format — no markdown, no comments:\n{ \"score\": <number> } \n\nhere ' s {{ $json.job_desciption }}the job listing details \n\nhere is the candidates skill set:\nHere is the information from the resume in a structured format:\n\nPersonal Information\n\nName: Ayush Gupta \n\n\nPhone: +91-9911926564 \n\n\nEmail: ayushg.it.23@nitj.ac.in \n\n\nLinkedIn: linkedin.com/in/ayushguptanitj \n\n\nGitHub: github.com/ayushguptanitj \n\nEducation\nDegree/Certificate\tInstitute/Board\tCGPA/Percentage\tYear\nB.Tech., IT\tNational Institute of Technology, Jalandhar\t8.6\t2027\nSenior Secondary\tCBSE Board\t94.2%\tMarch 2022\nSecondary\tCBSE Board\t98.2%\tMarch 2020\n\nWork Experience\n\nCompany: ANTLER AAKASH EV PRIVATE LIMITED \n\n\nRole: Web Developer Intern \n\n\nDuration: June 2025 - July 2025 \n\n\nLocation: Gurgaon, India \n\nResponsibilities:\n\nDeveloped a responsive, single-page application with four sections, ensuring cross-device compatibility. \n\nDesigned a brand-aligned logo. \n\nCollaborated with the founder to simplify and communicate core concepts of battery technology. \n\nInitiated the development of a scalable, 7-page website with 4 integrated product modules. \n\nProjects\n\nScrapX: Scrap Vendor Booking Platform \n\n\nDate: June 2025 \n\n\nTech Stack: Node.js, Express.js, React.js, MongoDB, Tailwind CSS \n\nDescription:\n\nDesigned and developed a full-stack marketplace with features like real-time rate comparison and scheduled pickups. \n\nAllowed vendors to list real-time rates for materials such as paper, metal, and plastic. \n\nImplemented a booking system for scheduled doorstep pickups by verified vendors based on location. \n\nFocused on intuitive user experience, vendor authentication, and transparent pricing. \n\n\nJobMatch: An AI-powered job automation agent \n\n\nDate: May 2025 \n\n\nTech Stack: n8n, Apify, OpenAI API, Gmail API, Google Sheets API, HTTP/Webhooks \n\nDescription:\n\nCreated an AI workflow that automated over 90% of the manual job search process. \n\nThe system scrapes over 10 LinkedIn job postings daily and generates personalized outreach emails using the OpenAI API. \n\nAutomated the tracking of more than 200 job applications and candidate data in Google Sheets, triggered by the Gmail API. \n\nAllowed recruiters to filter LinkedIn candidates by skills and experience. \n\nSkills\n\nProgramming Languages: C, C++, JavaScript, Python \n\n\nFrameworks and Libraries: Node.js, Express.js, React.js, Next.js, Tailwind CSS \n\n\nDatabases: MySQL, MongoDB \n\n\nTools and Platforms: Git, GitHub, VS Code, Postman, n8n, relevance \n\nAchievements\n5th Place Winner at BitBox 5.0 Hackathon, Jaypee Institute of Information Technology. \n\nRunner-Up at Institute Innovation Council's Ideathon 2024 (Top 2 out of 50+ teams). \n\nRanked in the Top 10 of the Academic Cohort for the B.Tech, Information Technology, 2027 Batch. \n\nCo-led the organization of HackMol 6.0 Hackathon, which had over 3,500 registrations from across India.\n\nplease return json format in following way: \n{\n\"score\":\n}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        1392,
+        0
+      ],
+      "id": "cf72ff9b-0721-49f0-8e91-0246ae45d9b0",
+      "name": "Message a model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "WqtPWAjnu8quyiBH",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2f5d8b44-dd48-4fe1-b3f5-226923465454",
+              "name": "=company_name ",
+              "value": "={{ JSON.parse($json[\"content\"][\"parts\"][0][\"text\"]).company_name }}",
+              "type": "string"
+            },
+            {
+              "id": "6e500c60-6409-4eeb-9fb6-9a09394d0436",
+              "name": "location",
+              "value": "={{ JSON.parse($json[\"content\"][\"parts\"][0][\"text\"]).location }}",
+              "type": "string"
+            },
+            {
+              "id": "d7bc8101-4051-470c-8377-59eb9761472e",
+              "name": "benefits",
+              "value": "={{ JSON.parse($json[\"content\"][\"parts\"][0][\"text\"]).benefits}}",
+              "type": "string"
+            },
+            {
+              "id": "093910fd-e4a0-498f-928b-220e82d797b2",
+              "name": "job_desciption",
+              "value": "={{ JSON.parse($json[\"content\"][\"parts\"][0][\"text\"]).description }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1184,
+        0
+      ],
+      "id": "13ef4aaf-79db-4aa0-9cf5-e4f476e9ca9f",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "09cfea60-6907-4d58-9672-550c03304179",
+              "name": "score",
+              "value": "={{ JSON.parse($json[\"content\"][\"parts\"][0][\"text\"]).score }}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1744,
+        0
+      ],
+      "id": "db049c22-c88a-45ed-8c01-dd8970136bf0",
+      "name": "Edit Fields1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "RSS Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Read": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model1": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Message a model2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Message a model1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "02a960d9-9336-4ffb-b9c4-b102a0e71575",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "67d68896915f3c6132db19909834b63699b9614c8a552d24ce167a98b6ecc407"
+  },
+  "id": "LYQEPZJk5N0thhLJ",
+  "tags": []
+}
